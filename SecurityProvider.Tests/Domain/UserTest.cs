@@ -180,6 +180,17 @@ public class UserTest
     }
 
     [Fact]
+    public void HydrateOptionalFields_Deleted()
+    {
+        var user = GetDeletedUser();
+        var userOptionalFields = new UserOptionalFields() { Department = _department };
+
+        Assert.Throws<DomainException>(() => user.HydrateOptionalFields(userOptionalFields));
+
+        Assert.True(user.Deleted);
+    }
+
+    [Fact]
     public void Delete()
     {
         var user = GetUser();

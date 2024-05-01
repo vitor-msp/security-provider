@@ -70,6 +70,9 @@ public class User : IUser
 
     public void HydrateOptionalFields(UserOptionalFields fields)
     {
+        if (Deleted)
+            throw new DomainException("Impossible to update a deleted user.");
+
         if (fields.Department != null) Department = fields.Department;
     }
 
