@@ -46,6 +46,7 @@ public class UserTest
         Assert.IsType<DateTime>(user.CreatedAt);
         Assert.True(user.CreatedAt >= minDate);
         Assert.True(user.CreatedAt <= maxDate);
+        Assert.False(user.Deleted);
     }
 
     [Fact]
@@ -82,6 +83,7 @@ public class UserTest
         Assert.Equal(_username, user.Username);
         Assert.Equal(userId, user.Id);
         Assert.Equal(userCreatedAt, user.CreatedAt);
+        Assert.False(user.Deleted);
     }
 
     [Fact]
@@ -98,6 +100,7 @@ public class UserTest
         Assert.Equal(_username, user.Username);
         Assert.Equal(userId, user.Id);
         Assert.Equal(userCreatedAt, user.CreatedAt);
+        Assert.False(user.Deleted);
     }
 
     [Fact]
@@ -111,6 +114,7 @@ public class UserTest
 
         Assert.Equal(_department, user.Department);
         Assert.Equal(userId, user.Id);
+        Assert.False(user.Deleted);
     }
 
     [Fact]
@@ -122,5 +126,16 @@ public class UserTest
         user.HydrateOptionalFields(optionalFields);
 
         Assert.Equal(_department, user.Department);
+        Assert.False(user.Deleted);
+    }
+
+    [Fact]
+    public void Delete()
+    {
+        var user = GetUser();
+        
+        user.Delete();
+
+        Assert.True(user.Deleted);
     }
 }

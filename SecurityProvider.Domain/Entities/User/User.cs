@@ -32,6 +32,8 @@ public class User : IUser
 
     public DateTime CreatedAt { get; private set; }
 
+    public bool Deleted { get; private set; }
+
     public string? Department { get; private set; }
 
     public User(UserRequiredFields fields)
@@ -43,6 +45,7 @@ public class User : IUser
         Name = fields.Name;
         Id = new Guid();
         CreatedAt = DateTime.Now;
+        Deleted = false;
     }
 
     public void HydrateRequiredFields(UserRequiredFields fields)
@@ -53,5 +56,10 @@ public class User : IUser
     public void HydrateOptionalFields(UserOptionalFields fields)
     {
         if (fields.Department != null) Department = fields.Department;
+    }
+
+    public void Delete()
+    {
+        Deleted = true;
     }
 }
