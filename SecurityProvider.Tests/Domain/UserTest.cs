@@ -104,6 +104,22 @@ public class UserTest
     }
 
     [Fact]
+    public void HydrateRequiredFields_Invalid()
+    {
+        var user = GetUser();
+        var userId = user.Id;
+
+        var userRequiredFields = new UserRequiredFields() { Name = "" };
+        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
+
+        userRequiredFields = new UserRequiredFields() { Name = "  " };
+        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
+
+        Assert.Equal(userId, user.Id);
+        Assert.False(user.Deleted);
+    }
+
+    [Fact]
     public void HydrateOptionalFields_SetNewFieldValue()
     {
         var optionalFields = new UserOptionalFields() { Department = _department };
@@ -133,7 +149,7 @@ public class UserTest
     public void Delete()
     {
         var user = GetUser();
-        
+
         user.Delete();
 
         Assert.True(user.Deleted);
