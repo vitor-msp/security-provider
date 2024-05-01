@@ -62,6 +62,9 @@ public class User : IUser
 
     public void HydrateRequiredFields(UserRequiredFields fields)
     {
+        if (Deleted)
+            throw new DomainException("Impossible to update a deleted user.");
+
         if (fields.Name != null) Name = fields.Name;
     }
 

@@ -27,6 +27,13 @@ public class UserTest
         return user;
     }
 
+    private User GetDeletedUser()
+    {
+        var user = GetUser();
+        user.Delete();
+        return user;
+    }
+
     [Fact]
     public void Create_Valid()
     {
@@ -117,6 +124,17 @@ public class UserTest
 
         Assert.Equal(userId, user.Id);
         Assert.False(user.Deleted);
+    }
+
+    [Fact]
+    public void HydrateRequiredFields_Deleted()
+    {
+        var user = GetDeletedUser();
+        var userRequiredFields = new UserRequiredFields() { Name = "Ciclano" };
+
+        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
+
+        Assert.True(user.Deleted);
     }
 
     [Fact]
