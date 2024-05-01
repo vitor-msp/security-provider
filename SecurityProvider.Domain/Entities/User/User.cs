@@ -52,6 +52,6 @@ public class User : IUser
 
     public void HydrateOptionalFields(UserOptionalFields fields)
     {
-        Department = fields.Department;
+        if (fields.Department != null) Department = fields.Department;
     }
 }

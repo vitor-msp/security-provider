@@ -20,6 +20,13 @@ public class UserTest
         });
     }
 
+    private User GetHydratedUser()
+    {
+        var user = GetUser();
+        user.HydrateOptionalFields(new UserOptionalFields() { Department = _department });
+        return user;
+    }
+
     [Fact]
     public void Create_Valid()
     {
@@ -104,5 +111,16 @@ public class UserTest
 
         Assert.Equal(_department, user.Department);
         Assert.Equal(userId, user.Id);
+    }
+
+    [Fact]
+    public void HydrateOptionalFields_IgnoreFieldNotInformed()
+    {
+        var optionalFields = new UserOptionalFields() { };
+        var user = GetHydratedUser();
+
+        user.HydrateOptionalFields(optionalFields);
+
+        Assert.Equal(_department, user.Department);
     }
 }
