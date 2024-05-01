@@ -34,6 +34,9 @@ public class User : IUser
 
     public User(UserRequiredFields fields)
     {
+        if (fields.Username == null || fields.Name == null)
+            throw new DomainException("Missing required fields.");
+
         Username = fields.Username;
         Name = fields.Name;
         Id = new Guid();
@@ -42,6 +45,6 @@ public class User : IUser
 
     public void HydrateRequiredFields(UserRequiredFields fields)
     {
-        Name = fields.Name;
+        if (fields.Name != null) Name = fields.Name;
     }
 }

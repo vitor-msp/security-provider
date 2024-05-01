@@ -20,7 +20,7 @@ public class UserTest
     }
 
     [Fact]
-    public void CreateUser()
+    public void Create_Valid()
     {
         DateTime minDate = DateTime.Now;
         var userRequiredFields = new UserRequiredFields()
@@ -41,7 +41,7 @@ public class UserTest
     }
 
     [Fact]
-    public void NotCreateUserWithInvalidData()
+    public void Create_Invalid()
     {
         var userRequiredFields = new UserRequiredFields() { };
         Assert.Throws<DomainException>(() => new User(userRequiredFields));
@@ -60,7 +60,7 @@ public class UserTest
     }
 
     [Fact]
-    public void HydrateUserRequiredFields()
+    public void HydrateRequiredFields_SetNewFieldValue()
     {
         string newName = "Ciclano Santos";
         var requiredFields = new UserRequiredFields()
@@ -74,6 +74,22 @@ public class UserTest
         user.HydrateRequiredFields(requiredFields);
 
         Assert.Equal(newName, user.Name);
+        Assert.Equal(_username, user.Username);
+        Assert.Equal(userId, user.Id);
+        Assert.Equal(userCreatedAt, user.CreatedAt);
+    }
+
+    [Fact]
+    public void HydrateRequiredFields_IgnoreFieldNotInformed()
+    {
+        var requiredFields = new UserRequiredFields() { };
+        var user = GetUser();
+        var userId = user.Id;
+        var userCreatedAt = user.CreatedAt;
+
+        user.HydrateRequiredFields(requiredFields);
+
+        Assert.Equal(_name, user.Name);
         Assert.Equal(_username, user.Username);
         Assert.Equal(userId, user.Id);
         Assert.Equal(userCreatedAt, user.CreatedAt);
