@@ -32,6 +32,8 @@ public class User : IUser
 
     public DateTime CreatedAt { get; private set; }
 
+    public string? Department { get; private set; }
+
     public User(UserRequiredFields fields)
     {
         if (fields.Username == null || fields.Name == null)
@@ -46,5 +48,10 @@ public class User : IUser
     public void HydrateRequiredFields(UserRequiredFields fields)
     {
         if (fields.Name != null) Name = fields.Name;
+    }
+
+    public void HydrateOptionalFields(UserOptionalFields fields)
+    {
+        Department = fields.Department;
     }
 }

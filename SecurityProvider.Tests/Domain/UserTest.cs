@@ -9,6 +9,7 @@ public class UserTest
 {
     private readonly string _username = "fulano";
     private readonly string _name = "Fulano de Tal";
+    private readonly string _department = "development";
 
     private User GetUser()
     {
@@ -63,10 +64,7 @@ public class UserTest
     public void HydrateRequiredFields_SetNewFieldValue()
     {
         string newName = "Ciclano Santos";
-        var requiredFields = new UserRequiredFields()
-        {
-            Name = newName
-        };
+        var requiredFields = new UserRequiredFields() { Name = newName };
         var user = GetUser();
         var userId = user.Id;
         var userCreatedAt = user.CreatedAt;
@@ -95,4 +93,16 @@ public class UserTest
         Assert.Equal(userCreatedAt, user.CreatedAt);
     }
 
+    [Fact]
+    public void HydrateOptionalFields_SetNewFieldValue()
+    {
+        var optionalFields = new UserOptionalFields() { Department = _department };
+        var user = GetUser();
+        var userId = user.Id;
+
+        user.HydrateOptionalFields(optionalFields);
+
+        Assert.Equal(_department, user.Department);
+        Assert.Equal(userId, user.Id);
+    }
 }
