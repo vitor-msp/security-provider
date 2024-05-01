@@ -56,23 +56,17 @@ public class UserTest
         Assert.False(user.Deleted);
     }
 
-    [Fact]
-    public void Create_Invalid()
+    [Theory]
+    [InlineData(null, null)]
+    [InlineData("", "fulano")]
+    [InlineData("    ", "fulano")]
+    [InlineData("fulano", "")]
+    [InlineData("fulano", "     ")]
+    public void Create_Invalid(string username, string name)
     {
-        var userRequiredFields = new UserRequiredFields() { };
-        Assert.Throws<DomainException>(() => new User(userRequiredFields));
-
-        userRequiredFields = new UserRequiredFields() { Username = "", Name = "fulano" };
-        Assert.Throws<DomainException>(() => new User(userRequiredFields));
-
-        userRequiredFields = new UserRequiredFields() { Username = "    ", Name = "fulano" };
-        Assert.Throws<DomainException>(() => new User(userRequiredFields));
-
-        userRequiredFields = new UserRequiredFields() { Username = "fulano", Name = "" };
-        Assert.Throws<DomainException>(() => new User(userRequiredFields));
-
-        userRequiredFields = new UserRequiredFields() { Username = "fulano", Name = "  " };
-        Assert.Throws<DomainException>(() => new User(userRequiredFields));
+        var userRequiredFields = new UserRequiredFields() { Username = username, Name = name };
+        var action = new Action(() => new User(userRequiredFields));
+        Assert.Throws<DomainException>(action);
     }
 
     [Fact]
@@ -110,31 +104,20 @@ public class UserTest
         Assert.False(user.Deleted);
     }
 
-    [Fact]
-    public void HydrateRequiredFields_Invalid()
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void HydrateRequiredFields_Invalid(string name)
     {
         var user = GetUser();
         var userId = user.Id;
+        var userRequiredFields = new UserRequiredFields() { Name = name };
 
-        var userRequiredFields = new UserRequiredFields() { Name = "" };
-        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
+        var action = new Action(() => user.HydrateRequiredFields(userRequiredFields));
 
-        userRequiredFields = new UserRequiredFields() { Name = "  " };
-        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
-
+        Assert.Throws<DomainException>(action);
         Assert.Equal(userId, user.Id);
         Assert.False(user.Deleted);
-    }
-
-    [Fact]
-    public void HydrateRequiredFields_Deleted()
-    {
-        var user = GetDeletedUser();
-        var userRequiredFields = new UserRequiredFields() { Name = "Ciclano" };
-
-        Assert.Throws<DomainException>(() => user.HydrateRequiredFields(userRequiredFields));
-
-        Assert.True(user.Deleted);
     }
 
     [Fact]
@@ -163,20 +146,41 @@ public class UserTest
         Assert.False(user.Deleted);
     }
 
-    [Fact]
-    public void HydrateOptionalFields_Invalid()
+    [Theory]
+    [InlineData("")]
+    [InlineData("    ")]
+    public void HydrateOptionalFields_Invalid(string department)
     {
         var user = GetUser();
         var userId = user.Id;
+        var userOptionalFields = new UserOptionalFields() { Department = department };
 
-        var userOptionalFields = new UserOptionalFields() { Department = "" };
-        Assert.Throws<DomainException>(() => user.HydrateOptionalFields(userOptionalFields));
+        var action = new Action(() => user.HydrateOptionalFields(userOptionalFields));
 
-        userOptionalFields = new UserOptionalFields() { Department = "  " };
-        Assert.Throws<DomainException>(() => user.HydrateOptionalFields(userOptionalFields));
-
+        Assert.Throws<DomainException>(action);
         Assert.Equal(userId, user.Id);
         Assert.False(user.Deleted);
+    }
+
+    [Fact]
+    public void Delete()
+    {
+        var user = GetUser();
+        user.Delete();
+        Assert.True(user.Deleted);
+    }
+
+
+    [Fact]
+    public void HydrateRequiredFields_Deleted()
+    {
+        var user = GetDeletedUser();
+        var userRequiredFields = new UserRequiredFields() { Name = "Ciclano" };
+
+        var action = new Action(() => user.HydrateRequiredFields(userRequiredFields));
+
+        Assert.Throws<DomainException>(action);
+        Assert.True(user.Deleted);
     }
 
     [Fact]
@@ -185,18 +189,9 @@ public class UserTest
         var user = GetDeletedUser();
         var userOptionalFields = new UserOptionalFields() { Department = _department };
 
-        Assert.Throws<DomainException>(() => user.HydrateOptionalFields(userOptionalFields));
+        var action = new Action(() => user.HydrateOptionalFields(userOptionalFields));
 
-        Assert.True(user.Deleted);
-    }
-
-    [Fact]
-    public void Delete()
-    {
-        var user = GetUser();
-
-        user.Delete();
-
+        Assert.Throws<DomainException>(action);
         Assert.True(user.Deleted);
     }
 }
