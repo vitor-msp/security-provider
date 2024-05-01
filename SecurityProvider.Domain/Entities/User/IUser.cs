@@ -1,6 +1,6 @@
 namespace SecurityProvider.Domain.Entities.User;
 
-interface IUser
+public interface IUser
 {
     void HydrateRequiredFields(UserRequiredFields fields);
     void HydrateOptionalFields(UserOptionalFields fields);

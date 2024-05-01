@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using SecurityProvider.Domain;
 using SecurityProvider.Domain.Entities.User;
 using Xunit;
@@ -193,5 +194,26 @@ public class UserTest
 
         Assert.Throws<DomainException>(action);
         Assert.True(user.Deleted);
+    }
+
+    [Fact]
+    public void Rebuild()
+    {
+        var savedUser = GetUser();
+        var requiredFields = new UserRequiredFields()
+        {
+            Username = savedUser.Username,
+            Name = savedUser.Name
+        };
+        var selfGeneratedFields = new UserSelfGeneratedFields()
+        {
+            Id = savedUser.Id,
+            CreatedAt = savedUser.CreatedAt,
+            Deleted = savedUser.Deleted
+        };
+
+        var user = new UserBuilder().Rebuild(requiredFields, selfGeneratedFields);
+
+        Assert.Equal(savedUser, user);
     }
 }

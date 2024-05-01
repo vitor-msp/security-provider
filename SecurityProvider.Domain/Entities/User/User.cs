@@ -3,6 +3,8 @@ namespace SecurityProvider.Domain.Entities.User;
 public class User : IUser
 {
     public Guid Id { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public bool Deleted { get; private set; }
 
     private string _username;
     public string Username
@@ -30,10 +32,6 @@ public class User : IUser
         }
     }
 
-    public DateTime CreatedAt { get; private set; }
-
-    public bool Deleted { get; private set; }
-
     private string? _department;
     public string? Department
     {
@@ -50,14 +48,24 @@ public class User : IUser
 
     public User(UserRequiredFields fields)
     {
-        if (fields.Username == null || fields.Name == null)
-            throw new DomainException("Missing required fields.");
-
-        Username = fields.Username;
-        Name = fields.Name;
+        ValidateRequiredFields(fields);
+        Username = fields.Username!;
+        Name = fields.Name!;
         Id = new Guid();
         CreatedAt = DateTime.Now;
         Deleted = false;
+    }
+
+    public User(UserRequiredFields requiredFields, UserSelfGeneratedFields selfGeneratedFields)
+    {
+        ValidateRequiredFields(requiredFields);
+        Username = requiredFields.Username!;
+        Name = requiredFields.Name!;
+
+        ValidateSelfGeneratedFields(selfGeneratedFields);
+        Id = (Guid)selfGeneratedFields.Id!;
+        CreatedAt = (DateTime)selfGeneratedFields.CreatedAt!;
+        Deleted = (bool)selfGeneratedFields.Deleted!;
     }
 
     public void HydrateRequiredFields(UserRequiredFields fields)
@@ -79,5 +87,51 @@ public class User : IUser
     public void Delete()
     {
         Deleted = true;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null) return false;
+        if (obj.GetType() != GetType()) return false;
+        var otherUser = (User)obj;
+        if (otherUser.Id != Id) return false;
+
+        var assertions = new List<bool>(){
+            otherUser.CreatedAt == CreatedAt,
+            otherUser.Deleted == Deleted,
+            otherUser.Username == Username,
+            otherUser.Name == Name,
+            otherUser.Department == Department,
+        };
+        return !assertions.Any(assertion => !assertion);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    private static void ValidateRequiredFields(UserRequiredFields requiredFields)
+    {
+        var fields = new List<object?>()
+        {
+            requiredFields.Username,
+            requiredFields.Name
+        };
+        if (fields.Any(field => field == null))
+            throw new DomainException("Missing required fields.");
+    }
+
+    private static void ValidateSelfGeneratedFields(UserSelfGeneratedFields selfGeneratedFields)
+    {
+        var fields = new List<object?>()
+        {
+            selfGeneratedFields.Id,
+            selfGeneratedFields.CreatedAt,
+            selfGeneratedFields.Deleted,
+
+        };
+        if (fields.Any(field => field == null))
+            throw new DomainException("Missing self generated fields.");
     }
 }
