@@ -34,7 +34,19 @@ public class User : IUser
 
     public bool Deleted { get; private set; }
 
-    public string? Department { get; private set; }
+    private string? _department;
+    public string? Department
+    {
+        get { return _department; }
+        private set
+        {
+            if (value == null) return;
+            value = value.Trim();
+            bool invalid = value == "";
+            if (invalid) throw new DomainException("Department is invalid.");
+            _department = value;
+        }
+    }
 
     public User(UserRequiredFields fields)
     {
