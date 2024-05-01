@@ -2,7 +2,7 @@ namespace SecurityProvider.Domain.Entities.User;
 
 public class User : IUser
 {
-    public string Id { get; private set; }
+    public Guid Id { get; private set; }
 
     private string _username;
     public string Username
@@ -22,7 +22,7 @@ public class User : IUser
     public User(UserRequiredFields fields)
     {
         Username = fields.Username;
-        Id = "123";
+        Id = new Guid();
         CreatedAt = DateTime.Now;
     }
 }

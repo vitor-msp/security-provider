@@ -21,7 +21,7 @@ public class UserTest
         DateTime maxDate = DateTime.Now;
 
         Assert.Equal(username, user.Username);
-        Assert.IsType<string>(user.Id);
+        Assert.IsType<Guid>(user.Id);
         Assert.IsType<DateTime>(user.CreatedAt);
         Assert.True(user.CreatedAt >= minDate);
         Assert.True(user.CreatedAt <= maxDate);
