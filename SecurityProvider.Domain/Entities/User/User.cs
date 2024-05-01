@@ -1,6 +1,8 @@
+using SecurityProvider.Domain.Entities.Contract;
+
 namespace SecurityProvider.Domain.Entities.User;
 
-public class User : IUser
+public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGeneratedFields>, IUser
 {
     public Guid Id { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -68,7 +70,7 @@ public class User : IUser
         Deleted = (bool)selfGeneratedFields.Deleted!;
     }
 
-    public void HydrateRequiredFields(UserRequiredFields fields)
+    public override void HydrateRequiredFields(UserRequiredFields fields)
     {
         if (Deleted)
             throw new DomainException("Impossible to update a deleted user.");
@@ -76,7 +78,7 @@ public class User : IUser
         if (fields.Name != null) Name = fields.Name;
     }
 
-    public void HydrateOptionalFields(UserOptionalFields fields)
+    public override void HydrateOptionalFields(UserOptionalFields fields)
     {
         if (Deleted)
             throw new DomainException("Impossible to update a deleted user.");
@@ -84,7 +86,7 @@ public class User : IUser
         if (fields.Department != null) Department = fields.Department;
     }
 
-    public void Delete()
+    public override void Delete()
     {
         Deleted = true;
     }

@@ -1,10 +1,10 @@
 namespace SecurityProvider.Domain.Entities.Contract;
 
-public interface IRebuildable<T, U, V, W>
-    where T: IEntity<U, W>
-    where U: IRequiredFields
-    where V: ISelfGeneratedFields
-    where W: IOptionalFields
+public interface IRebuildable<R, O, S, E>
+    where R : RequiredFields
+    where O : OptionalFields
+    where S : SelfGeneratedFields
+    where E : IEntity<R, O, S>
 {
-    T Rebuild(U requiredFields, V selfGeneratedFields);
+    E Rebuild(R requiredFields, S selfGeneratedFields);
 }
