@@ -4,10 +4,6 @@ namespace SecurityProvider.Domain.Entities.User;
 
 public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGeneratedFields>, IUser
 {
-    public Guid Id { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public bool Deleted { get; private set; }
-
     private string _username;
     public string Username
     {
@@ -48,26 +44,17 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
         }
     }
 
-    public User(UserRequiredFields fields)
+    public User(UserRequiredFields fields) : base(fields)
     {
-        ValidateRequiredFields(fields);
         Username = fields.Username!;
         Name = fields.Name!;
-        Id = new Guid();
-        CreatedAt = DateTime.Now;
-        Deleted = false;
     }
 
-    public User(UserRequiredFields requiredFields, UserSelfGeneratedFields selfGeneratedFields)
+    public User(UserRequiredFields requiredFields, UserSelfGeneratedFields selfGeneratedFields) :
+        base(requiredFields, selfGeneratedFields)
     {
-        ValidateRequiredFields(requiredFields);
         Username = requiredFields.Username!;
         Name = requiredFields.Name!;
-
-        ValidateSelfGeneratedFields(selfGeneratedFields);
-        Id = (Guid)selfGeneratedFields.Id!;
-        CreatedAt = (DateTime)selfGeneratedFields.CreatedAt!;
-        Deleted = (bool)selfGeneratedFields.Deleted!;
     }
 
     public override void HydrateRequiredFields(UserRequiredFields fields)
@@ -84,11 +71,6 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
             throw new DomainException("Impossible to update a deleted user.");
 
         if (fields.Department != null) Department = fields.Department;
-    }
-
-    public override void Delete()
-    {
-        Deleted = true;
     }
 
     public override bool Equals(object? obj)
@@ -113,7 +95,7 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
         return base.GetHashCode();
     }
 
-    private static void ValidateRequiredFields(UserRequiredFields requiredFields)
+    protected override void ValidateRequiredFields(UserRequiredFields requiredFields)
     {
         var fields = new List<object?>()
         {
@@ -122,18 +104,5 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
         };
         if (fields.Any(field => field == null))
             throw new DomainException("Missing required fields.");
-    }
-
-    private static void ValidateSelfGeneratedFields(UserSelfGeneratedFields selfGeneratedFields)
-    {
-        var fields = new List<object?>()
-        {
-            selfGeneratedFields.Id,
-            selfGeneratedFields.CreatedAt,
-            selfGeneratedFields.Deleted,
-
-        };
-        if (fields.Any(field => field == null))
-            throw new DomainException("Missing self generated fields.");
     }
 }
