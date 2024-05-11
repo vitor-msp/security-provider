@@ -98,4 +98,9 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
     {
         _users.Add(user);
     }
+
+    public void RemoveUser(IUser user)
+    {
+        _users.Remove(user);
+    }
 }

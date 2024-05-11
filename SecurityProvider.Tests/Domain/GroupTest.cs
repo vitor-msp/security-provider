@@ -213,4 +213,16 @@ public class GroupTest
 
         Assert.Contains(user, group.Users);
     }
+
+    [Fact]
+    public void RemoveUser()
+    {
+        var group = GetGroup();
+        var user = UserTest.GetUser();
+        group.AddUser(user);
+
+        group.RemoveUser(user);
+
+        Assert.DoesNotContain(user, group.Users);
+    }
 }
