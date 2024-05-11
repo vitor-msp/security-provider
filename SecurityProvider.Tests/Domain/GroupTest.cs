@@ -210,8 +210,10 @@ public class GroupTest
         var user = UserTest.GetUser();
 
         group.AddUser(user);
+        group.AddUser(user);
 
         Assert.Contains(user, group.Users);
+        Assert.Single(group.Users);
     }
 
     [Fact]

@@ -96,7 +96,8 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
 
     public void AddUser(IUser user)
     {
-        _users.Add(user);
+        if (!_users.Contains(user))
+            _users.Add(user);
     }
 
     public void RemoveUser(IUser user)
