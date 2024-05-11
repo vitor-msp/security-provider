@@ -63,16 +63,14 @@ public class Action :
     {
         if (obj == null) return false;
         if (obj.GetType() != GetType()) return false;
-        var otherUser = (Action)obj;
-        if (otherUser.Id != Id) return false;
+        if (!base.Equals(obj)) return false;
+        var other = (Action)obj;
 
         var assertions = new List<bool>(){
-            otherUser.CreatedAt == CreatedAt,
-            otherUser.Deleted == Deleted,
-            otherUser.Name == Name,
-            otherUser.Description == Description,
+            other.Name == Name,
+            other.Description == Description,
         };
-        return !assertions.Any(assertion => !assertion);
+        return assertions.All(assertion => assertion);
     }
 
     public override int GetHashCode()

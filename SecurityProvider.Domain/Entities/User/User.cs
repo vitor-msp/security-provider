@@ -77,17 +77,15 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
     {
         if (obj == null) return false;
         if (obj.GetType() != GetType()) return false;
-        var otherUser = (User)obj;
-        if (otherUser.Id != Id) return false;
+        if (!base.Equals(obj)) return false;
+        var other = (User)obj;
 
         var assertions = new List<bool>(){
-            otherUser.CreatedAt == CreatedAt,
-            otherUser.Deleted == Deleted,
-            otherUser.Username == Username,
-            otherUser.Name == Name,
-            otherUser.Department == Department,
+            other.Username == Username,
+            other.Name == Name,
+            other.Department == Department,
         };
-        return !assertions.Any(assertion => !assertion);
+        return assertions.All(assertion => assertion);
     }
 
     public override int GetHashCode()

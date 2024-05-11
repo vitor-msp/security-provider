@@ -34,6 +34,23 @@ public abstract class Entity<R, O, S> : IEntity<R, O, S>
         Deleted = true;
     }
 
+    public override bool Equals(object? obj)
+    {
+        var other = (Entity<R, O, S>)obj!;
+        if (other.Id != Id) return false;
+
+        var assertions = new List<bool>(){
+            other.CreatedAt == CreatedAt,
+            other.Deleted == Deleted,
+        };
+        return assertions.All(assertion => assertion);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
     protected abstract void ValidateRequiredFields(R requiredFields);
 
     protected void ValidateCommonSelfGeneratedFields(S selfGeneratedFields)
