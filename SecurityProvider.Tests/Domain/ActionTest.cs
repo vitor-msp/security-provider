@@ -34,10 +34,7 @@ public class ActionTest
     public void Create_Valid()
     {
         DateTime minDate = DateTime.Now;
-        var actionRequiredFields = new ActionRequiredFields()
-        {
-            Name = _name
-        };
+        var actionRequiredFields = new ActionRequiredFields() { Name = _name };
 
         var action = new Action(actionRequiredFields);
         DateTime maxDate = DateTime.Now;
@@ -189,10 +186,7 @@ public class ActionTest
     public void Rebuild()
     {
         var savedAction = GetAction();
-        var requiredFields = new ActionRequiredFields()
-        {
-            Name = savedAction.Name
-        };
+        var requiredFields = new ActionRequiredFields() { Name = savedAction.Name };
         var selfGeneratedFields = new ActionSelfGeneratedFields()
         {
             Id = savedAction.Id,
