@@ -9,4 +9,5 @@ public interface IGroup : IEntity<GroupRequiredFields, GroupOptionalFields, Grou
     void AddUser(IUser user);
     void RemoveUser(IUser user);
     void AddPolicy(IPolicy policy);
+    void RemovePolicy(IPolicy policy);
 }

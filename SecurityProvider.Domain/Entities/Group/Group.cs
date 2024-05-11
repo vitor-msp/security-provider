@@ -118,4 +118,9 @@ public class Group :
         if (!_policies.Contains(policy))
             _policies.Add(policy);
     }
+
+    public void RemovePolicy(IPolicy policy)
+    {
+        _policies.Remove(policy);
+    }
 }

@@ -240,4 +240,16 @@ public class GroupTest
         Assert.Contains(policy, group.Policies);
         Assert.Single(group.Policies);
     }
+
+    [Fact]
+    public void RemovePolicy()
+    {
+        var group = GetGroup();
+        var policy = PolicyTest.GetPolicy();
+        group.AddPolicy(policy);
+
+        group.RemovePolicy(policy);
+
+        Assert.DoesNotContain(policy, group.Policies);
+    }
 }
