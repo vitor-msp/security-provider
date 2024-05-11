@@ -113,13 +113,13 @@ public class Group :
         _users.Remove(user);
     }
 
-    public void AddPolicy(IPolicy policy)
+    public void AttachPolicy(IPolicy policy)
     {
         if (!_policies.Contains(policy))
             _policies.Add(policy);
     }
 
-    public void RemovePolicy(IPolicy policy)
+    public void DetachPolicy(IPolicy policy)
     {
         _policies.Remove(policy);
     }

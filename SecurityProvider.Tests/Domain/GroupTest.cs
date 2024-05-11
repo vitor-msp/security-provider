@@ -229,26 +229,26 @@ public class GroupTest
     }
 
     [Fact]
-    public void AddPolicy()
+    public void AttachPolicy()
     {
         var group = GetGroup();
         var policy = PolicyTest.GetPolicy();
 
-        group.AddPolicy(policy);
-        group.AddPolicy(policy);
+        group.AttachPolicy(policy);
+        group.AttachPolicy(policy);
 
         Assert.Contains(policy, group.Policies);
         Assert.Single(group.Policies);
     }
 
     [Fact]
-    public void RemovePolicy()
+    public void DetachPolicy()
     {
         var group = GetGroup();
         var policy = PolicyTest.GetPolicy();
-        group.AddPolicy(policy);
+        group.AttachPolicy(policy);
 
-        group.RemovePolicy(policy);
+        group.DetachPolicy(policy);
 
         Assert.DoesNotContain(policy, group.Policies);
     }
