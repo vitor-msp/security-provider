@@ -1,4 +1,5 @@
 using SecurityProvider.Domain.Entities.Contract;
+using SecurityProvider.Domain.Entities.User;
 
 namespace SecurityProvider.Domain.Entities.Group;
 
@@ -29,6 +30,12 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
             if (invalid) throw new DomainException("Description is invalid.");
             _description = value;
         }
+    }
+
+    private readonly List<IUser> _users = new();
+    public List<IUser> Users
+    {
+        get { return new List<IUser>(_users); }
     }
 
     public Group(GroupRequiredFields fields) : base(fields)
@@ -85,5 +92,10 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
         };
         if (fields.Any(field => field == null))
             throw new DomainException("Missing required fields.");
+    }
+
+    public void AddUser(IUser user)
+    {
+        _users.Add(user);
     }
 }

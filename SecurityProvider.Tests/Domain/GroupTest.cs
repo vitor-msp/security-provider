@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using SecurityProvider.Domain;
 using SecurityProvider.Domain.Entities.Group;
+using SecurityProvider.Domain.Entities.User;
 using Xunit;
 
 namespace SecurityProvider.Tests.Domain;
@@ -199,5 +201,16 @@ public class GroupTest
         var group = new GroupBuilder().Rebuild(requiredFields, selfGeneratedFields);
 
         Assert.Equal(savedGroup, group);
+    }
+
+    [Fact]
+    public void AddUser()
+    {
+        var group = GetGroup();
+        var user = UserTest.GetUser();
+
+        group.AddUser(user);
+
+        Assert.Contains(user, group.Users);
     }
 }

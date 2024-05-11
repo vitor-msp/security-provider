@@ -7,11 +7,11 @@ namespace SecurityProvider.Tests.Domain;
 
 public class UserTest
 {
-    private readonly string _username = "fulano";
-    private readonly string _name = "Fulano de Tal";
-    private readonly string _department = "development";
+    private static readonly string _username = "fulano";
+    private static readonly string _name = "Fulano de Tal";
+    private static readonly string _department = "development";
 
-    private User GetUser()
+    public static User GetUser()
     {
         return new User(new UserRequiredFields()
         {
