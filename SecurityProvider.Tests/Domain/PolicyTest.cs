@@ -7,10 +7,10 @@ namespace SecurityProvider.Tests.Domain;
 
 public class PolicyTest
 {
-    private readonly string _name = "s3_write";
-    private readonly string _description = "allow write in s3";
+    private static readonly string _name = "s3_write";
+    private static readonly string _description = "allow write in s3";
 
-    private Policy GetPolicy()
+    public static Policy GetPolicy()
     {
         return new Policy(new PolicyRequiredFields() { Name = _name });
     }

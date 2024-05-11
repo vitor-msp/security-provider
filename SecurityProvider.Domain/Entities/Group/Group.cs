@@ -1,9 +1,11 @@
 using SecurityProvider.Domain.Entities.Contract;
+using SecurityProvider.Domain.Entities.Policy;
 using SecurityProvider.Domain.Entities.User;
 
 namespace SecurityProvider.Domain.Entities.Group;
 
-public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfGeneratedFields>, IGroup
+public class Group :
+    Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfGeneratedFields>, IGroup
 {
     private string _name;
     public string Name
@@ -36,6 +38,12 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
     public List<IUser> Users
     {
         get { return new List<IUser>(_users); }
+    }
+
+    private readonly List<IPolicy> _policies = new();
+    public List<IPolicy> Policies
+    {
+        get { return new List<IPolicy>(_policies); }
     }
 
     public Group(GroupRequiredFields fields) : base(fields)
@@ -103,5 +111,11 @@ public class Group : Entity<GroupRequiredFields, GroupOptionalFields, GroupSelfG
     public void RemoveUser(IUser user)
     {
         _users.Remove(user);
+    }
+
+    public void AddPolicy(IPolicy policy)
+    {
+        if (!_policies.Contains(policy))
+            _policies.Add(policy);
     }
 }

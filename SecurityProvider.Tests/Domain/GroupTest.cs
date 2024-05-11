@@ -227,4 +227,17 @@ public class GroupTest
 
         Assert.DoesNotContain(user, group.Users);
     }
+
+    [Fact]
+    public void AddPolicy()
+    {
+        var group = GetGroup();
+        var policy = PolicyTest.GetPolicy();
+
+        group.AddPolicy(policy);
+        group.AddPolicy(policy);
+
+        Assert.Contains(policy, group.Policies);
+        Assert.Single(group.Policies);
+    }
 }
