@@ -4,6 +4,6 @@ public class ActionBuilder : IActionBuilder
 {
     public IAction Rebuild(ActionRequiredFields requiredFields, ActionSelfGeneratedFields selfGeneratedFields)
     {
-        throw new NotImplementedException();
+        return new Action(requiredFields, selfGeneratedFields);
     }
 }

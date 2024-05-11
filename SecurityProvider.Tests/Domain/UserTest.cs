@@ -1,5 +1,4 @@
 using System;
-using System.Text.Json;
 using SecurityProvider.Domain;
 using SecurityProvider.Domain.Entities.User;
 using Xunit;
