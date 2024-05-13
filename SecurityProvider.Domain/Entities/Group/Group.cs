@@ -37,13 +37,13 @@ public class Group :
     private readonly List<IUser> _users = new();
     public List<IUser> Users
     {
-        get { return new List<IUser>(_users); }
+        get { return new(_users); }
     }
 
     private readonly List<IPolicy> _policies = new();
     public List<IPolicy> Policies
     {
-        get { return new List<IPolicy>(_policies); }
+        get { return new(_policies); }
     }
 
     public Group(GroupRequiredFields fields) : base(fields)

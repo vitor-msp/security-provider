@@ -1,4 +1,5 @@
 using SecurityProvider.Domain.Entities.Contract;
+using SecurityProvider.Domain.Entities.Policy;
 
 namespace SecurityProvider.Domain.Entities.User;
 
@@ -42,6 +43,12 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
             if (invalid) throw new DomainException("Department is invalid.");
             _department = value;
         }
+    }
+
+    private readonly List<IPolicy> _policies = new();
+    public List<IPolicy> Policies
+    {
+        get { return new(_policies); }
     }
 
     public User(UserRequiredFields fields) : base(fields)
@@ -102,5 +109,16 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
         };
         if (fields.Any(field => field == null))
             throw new DomainException("Missing required fields.");
+    }
+
+    public void AttachPolicy(IPolicy policy)
+    {
+        if (!_policies.Contains(policy))
+            _policies.Add(policy);
+    }
+
+    public void DetachPolicy(IPolicy policy)
+    {
+        _policies.Remove(policy);
     }
 }

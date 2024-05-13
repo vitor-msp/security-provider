@@ -215,4 +215,29 @@ public class UserTest
 
         Assert.Equal(savedUser, user);
     }
+
+    [Fact]
+    public void AttachPolicy()
+    {
+        var user = GetUser();
+        var policy = PolicyTest.GetPolicy();
+
+        user.AttachPolicy(policy);
+        user.AttachPolicy(policy);
+
+        Assert.Contains(policy, user.Policies);
+        Assert.Single(user.Policies);
+    }
+
+    [Fact]
+    public void DetachPolicy()
+    {
+        var user = GetUser();
+        var policy = PolicyTest.GetPolicy();
+        user.AttachPolicy(policy);
+
+        user.DetachPolicy(policy);
+
+        Assert.DoesNotContain(policy, user.Policies);
+    }
 }
