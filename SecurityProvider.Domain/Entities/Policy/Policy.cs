@@ -19,6 +19,8 @@ public class Policy :
         }
     }
 
+    public PolicyEffect Effect { get; set; }
+
     private string _description;
     public string? Description
     {
@@ -42,12 +44,14 @@ public class Policy :
     public Policy(PolicyRequiredFields fields) : base(fields)
     {
         Name = fields.Name!;
+        Effect = (PolicyEffect)fields.Effect!;
     }
 
     public Policy(PolicyRequiredFields requiredFields, PolicySelfGeneratedFields selfGeneratedFields)
         : base(requiredFields, selfGeneratedFields)
     {
         Name = requiredFields.Name!;
+        Effect = (PolicyEffect)requiredFields.Effect!;
     }
 
     public override void HydrateRequiredFields(PolicyRequiredFields fields)
@@ -56,6 +60,7 @@ public class Policy :
             throw new DomainException("Impossible to update a deleted policy.");
 
         if (fields.Name != null) Name = fields.Name;
+        if (fields.Effect != null) Effect = (PolicyEffect)fields.Effect;
     }
 
     public override void HydrateOptionalFields(PolicyOptionalFields fields)
@@ -75,6 +80,7 @@ public class Policy :
 
         var assertions = new List<bool>(){
             other.Name == Name,
+            other.Effect == Effect,
             other.Description == Description,
         };
         return assertions.All(assertion => assertion);
@@ -89,7 +95,8 @@ public class Policy :
     {
         var fields = new List<object?>()
         {
-            requiredFields.Name
+            requiredFields.Name,
+            requiredFields.Effect
         };
         if (fields.Any(field => field == null))
             throw new DomainException("Missing required fields.");

@@ -8,11 +8,12 @@ namespace SecurityProvider.Tests.Domain;
 public class PolicyTest
 {
     private static readonly string _name = "s3_write";
+    private static readonly PolicyEffect _effect = PolicyEffect.Allow;
     private static readonly string _description = "allow write in s3";
 
     public static Policy GetPolicy()
     {
-        return new Policy(new PolicyRequiredFields() { Name = _name });
+        return new Policy(new PolicyRequiredFields() { Name = _name, Effect = _effect });
     }
 
     private Policy GetHydratedPolicy()
@@ -33,7 +34,7 @@ public class PolicyTest
     public void Create_Valid()
     {
         DateTime minDate = DateTime.Now;
-        var policyRequiredFields = new PolicyRequiredFields() { Name = _name };
+        var policyRequiredFields = new PolicyRequiredFields() { Name = _name, Effect = _effect };
 
         var policy = new Policy(policyRequiredFields);
         DateTime maxDate = DateTime.Now;
@@ -47,12 +48,14 @@ public class PolicyTest
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("     ")]
-    public void Create_Invalid(string name)
+    [InlineData(null, PolicyEffect.Allow)]
+    [InlineData("", PolicyEffect.Deny)]
+    [InlineData("     ", PolicyEffect.Allow)]
+    [InlineData("fulano", null)]
+    [InlineData(null, null)]
+    public void Create_Invalid(string name, PolicyEffect? effect)
     {
-        var policyRequiredFields = new PolicyRequiredFields() { Name = name };
+        var policyRequiredFields = new PolicyRequiredFields() { Name = name, Effect = effect };
         var action = new Action(() => new Policy(policyRequiredFields));
         Assert.Throws<DomainException>(action);
     }
@@ -61,7 +64,8 @@ public class PolicyTest
     public void HydrateRequiredFields_SetNewFieldValue()
     {
         string newName = "s3_read";
-        var requiredFields = new PolicyRequiredFields() { Name = newName };
+        PolicyEffect newEffect = PolicyEffect.Deny;
+        var requiredFields = new PolicyRequiredFields() { Name = newName, Effect = newEffect };
         var policy = GetPolicy();
         var policyId = policy.Id;
         var policyCreatedAt = policy.CreatedAt;
@@ -69,6 +73,7 @@ public class PolicyTest
         policy.HydrateRequiredFields(requiredFields);
 
         Assert.Equal(newName, policy.Name);
+        Assert.Equal(newEffect, policy.Effect);
         Assert.Equal(policyId, policy.Id);
         Assert.Equal(policyCreatedAt, policy.CreatedAt);
         Assert.False(policy.Deleted);
@@ -185,7 +190,11 @@ public class PolicyTest
     public void Rebuild()
     {
         var savedPolicy = GetPolicy();
-        var requiredFields = new PolicyRequiredFields() { Name = savedPolicy.Name };
+        var requiredFields = new PolicyRequiredFields()
+        {
+            Name = savedPolicy.Name,
+            Effect = savedPolicy.Effect
+        };
         var selfGeneratedFields = new PolicySelfGeneratedFields()
         {
             Id = savedPolicy.Id,
