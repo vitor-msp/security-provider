@@ -197,4 +197,29 @@ public class PolicyTest
 
         Assert.Equal(savedPolicy, policy);
     }
+
+    [Fact]
+    public void AddPermission()
+    {
+        var policy = GetPolicy();
+        var action = ActionTest.GetAction();
+
+        policy.AddPermission(action);
+        policy.AddPermission(action);
+
+        Assert.Contains(action, policy.Permissions);
+        Assert.Single(policy.Permissions);
+    }
+
+    [Fact]
+    public void RemovePermission()
+    {
+        var policy = GetPolicy();
+        var action = ActionTest.GetAction();
+        policy.AddPermission(action);
+
+        policy.RemovePermission(action);
+
+        Assert.DoesNotContain(action, policy.Permissions);
+    }
 }

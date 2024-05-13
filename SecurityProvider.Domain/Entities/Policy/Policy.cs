@@ -1,3 +1,4 @@
+using SecurityProvider.Domain.Entities.Action;
 using SecurityProvider.Domain.Entities.Contract;
 
 namespace SecurityProvider.Domain.Entities.Policy;
@@ -30,6 +31,12 @@ public class Policy :
             if (invalid) throw new DomainException("Description is invalid.");
             _description = value;
         }
+    }
+
+    private readonly List<IAction> _permissions = new();
+    public List<IAction> Permissions
+    {
+        get { return new(_permissions); }
     }
 
     public Policy(PolicyRequiredFields fields) : base(fields)
@@ -86,5 +93,16 @@ public class Policy :
         };
         if (fields.Any(field => field == null))
             throw new DomainException("Missing required fields.");
+    }
+
+    public void AddPermission(IAction action)
+    {
+        if (!_permissions.Contains(action))
+            _permissions.Add(action);
+    }
+
+    public void RemovePermission(IAction action)
+    {
+        _permissions.Remove(action);
     }
 }

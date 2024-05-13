@@ -8,10 +8,10 @@ namespace SecurityProvider.Tests.Domain;
 
 public class ActionTest
 {
-    private readonly string _name = "create_s3_object";
-    private readonly string _description = "create a s3 object in a bucket";
+    private static readonly string _name = "create_s3_object";
+    private static readonly string _description = "create a s3 object in a bucket";
 
-    private Action GetAction()
+    public static Action GetAction()
     {
         return new Action(new ActionRequiredFields() { Name = _name });
     }
