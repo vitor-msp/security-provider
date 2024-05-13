@@ -197,4 +197,29 @@ public class RoleTest
 
         Assert.Equal(savedRole, role);
     }
+
+    [Fact]
+    public void AddPermission()
+    {
+        var role = GetRole();
+        var policy = PolicyTest.GetPolicy();
+
+        role.AddPermission(policy);
+        role.AddPermission(policy);
+
+        Assert.Contains(policy, role.Permissions);
+        Assert.Single(role.Permissions);
+    }
+
+    [Fact]
+    public void RemovePermission()
+    {
+        var role = GetRole();
+        var policy = PolicyTest.GetPolicy();
+        role.AddPermission(policy);
+
+        role.RemovePermission(policy);
+
+        Assert.DoesNotContain(policy, role.Permissions);
+    }
 }
