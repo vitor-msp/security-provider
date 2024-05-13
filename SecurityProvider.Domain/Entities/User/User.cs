@@ -1,5 +1,6 @@
 using SecurityProvider.Domain.Entities.Contract;
 using SecurityProvider.Domain.Entities.Policy;
+using SecurityProvider.Domain.Entities.Role;
 
 namespace SecurityProvider.Domain.Entities.User;
 
@@ -50,6 +51,8 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
     {
         get { return new(_policies); }
     }
+
+    public IRole? Role { get; set; }
 
     public User(UserRequiredFields fields) : base(fields)
     {
