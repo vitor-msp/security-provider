@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using SecurityProvider.Domain.Entities.Policy;
 using SecurityProvider.Domain.Entities.User;
 using SecurityProvider.Domain.SecurityAnalyzers;
@@ -7,15 +9,16 @@ namespace SecurityProvider.Tests.Domain;
 
 public class RoleBasedOneOppositeEffectTest
 {
-    private IUser MakeSUT_NoneOppositeEffect(PolicyEffect effect)
+    private static IUser MakeSUT(List<PolicyEffect> effects)
     {
-        var policyDeny1 = new Policy(new PolicyRequiredFields() { Name = "policy1", Effect = effect });
-        var policyDeny2 = new Policy(new PolicyRequiredFields() { Name = "policy2", Effect = effect });
-        policyDeny1.AddPermission(ActionTest.GetAction());
-        policyDeny2.AddPermission(ActionTest.GetAction());
         var role = RoleTest.GetRole();
-        role.AddPermission(policyDeny1);
-        role.AddPermission(policyDeny2);
+        foreach (var effect in effects)
+        {
+            var policyName = $"policy-{new Random().Next(0, 100)}";
+            var policy = new Policy(new PolicyRequiredFields() { Name = policyName, Effect = effect });
+            policy.AddPermission(ActionTest.GetAction()).AddPermission(ActionTest.GetAction());
+            role.AddPermission(policy);
+        }
         var user = UserTest.GetUser();
         user.Role = role;
         return user;
@@ -24,7 +27,7 @@ public class RoleBasedOneOppositeEffectTest
     [Fact]
     public void DefaultEffectDeny_NoneAllowEffect()
     {
-        var user = MakeSUT_NoneOppositeEffect(PolicyEffect.Deny);
+        var user = MakeSUT(new() { PolicyEffect.Deny });
         var action = ActionTest.GetAction();
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
@@ -35,7 +38,7 @@ public class RoleBasedOneOppositeEffectTest
     [Fact]
     public void DefaultEffectAllow_NoneDenyEffect()
     {
-        var user = MakeSUT_NoneOppositeEffect(PolicyEffect.Allow);
+        var user = MakeSUT(new() { PolicyEffect.Allow });
         var action = ActionTest.GetAction();
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);

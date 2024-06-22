@@ -13,6 +13,6 @@ public interface IPolicy :
     PolicyEffect Effect { get; }
     string? Description { get; }
     List<IAction> Permissions { get; }
-    void AddPermission(IAction action);
+    IPolicy AddPermission(IAction action);
     void RemovePermission(IAction action);
 }

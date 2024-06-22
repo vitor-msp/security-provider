@@ -102,10 +102,11 @@ public class Policy :
             throw new DomainException("Missing required fields.");
     }
 
-    public void AddPermission(IAction action)
+    public IPolicy AddPermission(IAction action)
     {
         if (!_permissions.Contains(action))
             _permissions.Add(action);
+        return this;
     }
 
     public void RemovePermission(IAction action)
