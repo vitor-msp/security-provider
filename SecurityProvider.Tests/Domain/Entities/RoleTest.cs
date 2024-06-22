@@ -7,10 +7,10 @@ namespace SecurityProvider.Tests.Domain;
 
 public class RoleTest
 {
-    private readonly string _name = "s3_writer";
-    private readonly string _description = "allow write in s3";
+    private static readonly string _name = "s3_writer";
+    private static readonly string _description = "allow write in s3";
 
-    private Role GetRole()
+    public static Role GetRole()
     {
         return new Role(new RoleRequiredFields() { Name = _name });
     }
