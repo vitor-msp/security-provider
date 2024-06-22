@@ -6,7 +6,7 @@ namespace SecurityProvider.Domain.SecurityAnalyzers;
 
 public class RoleBasedOneOppositeEffect : ISecurityAnalyzer
 {
-    public bool UserCanAccessAction(IUser user, IAction action, PolicyEffect defaultEffect)
+    public virtual bool UserCanAccessAction(IUser user, IAction action, PolicyEffect defaultEffect)
     {
         var oppositeEffect = GetOppositeEffect(defaultEffect);
         var existsActionToTheOppositeEffect = user.Role?.Permissions.Any(policy =>
