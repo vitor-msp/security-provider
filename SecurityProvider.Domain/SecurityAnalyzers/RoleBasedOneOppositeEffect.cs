@@ -17,5 +17,5 @@ public class RoleBasedOneOppositeEffect : ISecurityAnalyzer
     }
 
     private static PolicyEffect GetOppositeEffect(PolicyEffect effect)
-        => effect == PolicyEffect.Allow ? PolicyEffect.Allow : PolicyEffect.Deny;
+        => effect == PolicyEffect.Allow ? PolicyEffect.Deny : PolicyEffect.Allow;
 }
