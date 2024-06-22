@@ -31,6 +31,28 @@ public class RoleBasedOneOppositeEffectTest
     }
 
     [Fact]
+    public void DefaultEffectDeny_NoneRole()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_NoneRole()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.True(result);
+    }
+
+    [Fact]
     public void DefaultEffectDeny_NoneAllowEffect()
     {
         var action = ActionTest.GetAction();
@@ -53,24 +75,24 @@ public class RoleBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectDeny_NoneRole()
+    public void DefaultEffectDeny_OneAllowAndNoneDeny()
     {
-        var user = UserTest.GetUser();
         var action = ActionTest.GetAction();
+        var user = MakeSUT(action, new() { PolicyEffect.Allow });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
-        Assert.False(result);
+        Assert.True(result);
     }
 
     [Fact]
-    public void DefaultEffectAllow_NoneRole()
+    public void DefaultEffectAllow_OneDenyAndNoneAllow()
     {
-        var user = UserTest.GetUser();
         var action = ActionTest.GetAction();
+        var user = MakeSUT(action, new() { PolicyEffect.Deny });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
-        Assert.True(result);
+        Assert.False(result);
     }
 }
