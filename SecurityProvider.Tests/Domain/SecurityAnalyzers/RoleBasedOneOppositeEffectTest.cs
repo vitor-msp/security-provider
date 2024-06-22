@@ -95,4 +95,26 @@ public class RoleBasedOneOppositeEffectTest
 
         Assert.False(result);
     }
+
+    [Fact]
+    public void DefaultEffectDeny_OneAllowAndOneDeny()
+    {
+        var action = ActionTest.GetAction();
+        var user = MakeSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_OneDenyAndOneAllow()
+    {
+        var action = ActionTest.GetAction();
+        var user = MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.False(result);
+    }
 }
