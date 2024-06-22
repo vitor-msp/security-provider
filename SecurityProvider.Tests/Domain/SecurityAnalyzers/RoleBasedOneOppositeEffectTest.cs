@@ -42,4 +42,26 @@ public class RoleBasedOneOppositeEffectTest
 
         Assert.True(result);
     }
+
+    [Fact]
+    public void DefaultEffectDeny_NoneRole()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_NoneRole()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.True(result);
+    }
 }
