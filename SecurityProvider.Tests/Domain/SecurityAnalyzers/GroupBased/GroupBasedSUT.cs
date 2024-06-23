@@ -8,7 +8,7 @@ namespace SecurityProvider.Tests.Domain;
 
 public class GroupBasedSUT
 {
-    public static IUser MakeSUT(IAction action, List<PolicyEffect> effects)
+    public static IUser MakeGroupAttachedSUT(IAction action, List<PolicyEffect> effects)
     {
         var group = GroupTest.GetGroup();
         foreach (var effect in effects)
@@ -19,6 +19,18 @@ public class GroupBasedSUT
         }
         var user = UserTest.GetUser();
         group.AddUser(user);
+        return user;
+    }
+
+    public static IUser MakeUserAttachedSUT(IAction action, List<PolicyEffect> effects)
+    {
+        var user = UserTest.GetUser();
+        foreach (var effect in effects)
+        {
+            var policy = GeneratePolicy(effect);
+            policy.AddPermission(action).AddPermission(ActionTest.GetAction());
+            user.AttachPolicy(policy);
+        }
         return user;
     }
 

@@ -7,7 +7,7 @@ namespace SecurityProvider.Tests.Domain;
 public class GroupBasedOneOppositeEffectTest
 {
     [Fact]
-    public void DefaultEffectDeny_NoneRole()
+    public void DefaultEffectDeny_NoneRole_GroupAttached()
     {
         var user = UserTest.GetUser();
         var action = ActionTest.GetAction();
@@ -18,10 +18,10 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectDeny_NoneAllowEffect()
+    public void DefaultEffectDeny_NoneAllowEffect_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Deny });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -29,10 +29,10 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectDeny_OneAllowAndNoneDeny()
+    public void DefaultEffectDeny_OneAllowAndNoneDeny_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Allow });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -40,10 +40,10 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectDeny_OneAllowAndOneDeny()
+    public void DefaultEffectDeny_OneAllowAndOneDeny_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -51,7 +51,7 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectAllow_NoneRole()
+    public void DefaultEffectAllow_NoneRole_GroupAttached()
     {
         var user = UserTest.GetUser();
         var action = ActionTest.GetAction();
@@ -62,10 +62,10 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectAllow_NoneDenyEffect()
+    public void DefaultEffectAllow_NoneDenyEffect_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Allow });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -73,10 +73,10 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectAllow_OneDenyAndNoneAllow()
+    public void DefaultEffectAllow_OneDenyAndNoneAllow_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Deny });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -84,10 +84,98 @@ public class GroupBasedOneOppositeEffectTest
     }
 
     [Fact]
-    public void DefaultEffectAllow_OneDenyAndOneAllow()
+    public void DefaultEffectAllow_OneDenyAndOneAllow_GroupAttached()
     {
         var action = ActionTest.GetAction();
-        var user = GroupBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = GroupBasedSUT.MakeGroupAttachedSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectDeny_NoneRole_UserAttached()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectDeny_NoneAllowEffect_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Deny });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectDeny_OneAllowAndNoneDeny_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Allow });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DefaultEffectDeny_OneAllowAndOneDeny_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_NoneRole_UserAttached()
+    {
+        var user = UserTest.GetUser();
+        var action = ActionTest.GetAction();
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_NoneDenyEffect_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Allow });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_OneDenyAndNoneAllow_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Deny });
+
+        var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
+
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void DefaultEffectAllow_OneDenyAndOneAllow_UserAttached()
+    {
+        var action = ActionTest.GetAction();
+        var user = GroupBasedSUT.MakeUserAttachedSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new GroupBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
