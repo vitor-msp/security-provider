@@ -4,18 +4,17 @@ using SecurityProvider.Domain.Entities.User;
 
 namespace SecurityProvider.Domain.SecurityAnalyzers;
 
-public class RoleBasedOneOppositeEffect : ISecurityAnalyzer
+public abstract class OneOppositeEffect : ISecurityAnalyzer
 {
-    public virtual bool UserCanAccessAction(IUser user, IAction action, PolicyEffect defaultEffect)
+    public bool UserCanAccessAction(IUser user, IAction action, PolicyEffect defaultEffect)
     {
         var oppositeEffect = GetOppositeEffect(defaultEffect);
-        var existsActionToTheOppositeEffect = user.Role?.Permissions.Any(policy =>
-        {
-            return policy.Permissions.Any(actionAdded => actionAdded.Equals(action)) && policy.Effect == oppositeEffect;
-        }) ?? false;
+        var existsActionToTheOppositeEffect = ExistsActionToTheOppositeEffect(user, action, oppositeEffect);
         return defaultEffect == PolicyEffect.Deny ? existsActionToTheOppositeEffect : !existsActionToTheOppositeEffect;
     }
 
     private static PolicyEffect GetOppositeEffect(PolicyEffect effect)
         => effect == PolicyEffect.Allow ? PolicyEffect.Deny : PolicyEffect.Allow;
+
+    protected abstract bool ExistsActionToTheOppositeEffect(IUser user, IAction action, PolicyEffect oppositeEffect);
 }

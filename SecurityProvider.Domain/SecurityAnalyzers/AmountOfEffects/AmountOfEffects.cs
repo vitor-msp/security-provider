@@ -4,13 +4,13 @@ using SecurityProvider.Domain.Entities.User;
 
 namespace SecurityProvider.Domain.SecurityAnalyzers;
 
-public class RoleBasedAmountOfEffects : ISecurityAnalyzer
+public abstract class AmountOfEffects : ISecurityAnalyzer
 {
     public bool UserCanAccessAction(IUser user, IAction action, PolicyEffect defaultEffect)
     {
         var oppositeEffect = GetOppositeEffect(defaultEffect);
-        var defaultEffectAmount = FindEffect(user, action, defaultEffect);
-        var oppositeEffectAmount = FindEffect(user, action, oppositeEffect);
+        var defaultEffectAmount = SumEffects(user, action, defaultEffect);
+        var oppositeEffectAmount = SumEffects(user, action, oppositeEffect);
 
         if (defaultEffect == PolicyEffect.Deny)
             return defaultEffectAmount < oppositeEffectAmount;
@@ -21,10 +21,5 @@ public class RoleBasedAmountOfEffects : ISecurityAnalyzer
     private static PolicyEffect GetOppositeEffect(PolicyEffect effect)
         => effect == PolicyEffect.Allow ? PolicyEffect.Deny : PolicyEffect.Allow;
 
-    private static int FindEffect(IUser user, IAction action, PolicyEffect effect)
-        => user.Role?.Permissions.Sum(policy =>
-        {
-            var actionFinded = policy.Permissions.Any(actionAdded => actionAdded.Equals(action)) && policy.Effect == effect;
-            return actionFinded ? 1 : 0;
-        }) ?? 0;
+    protected abstract int SumEffects(IUser user, IAction action, PolicyEffect effect);
 }
