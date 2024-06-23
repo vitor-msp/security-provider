@@ -6,7 +6,7 @@ using SecurityProvider.Domain.Entities.User;
 
 namespace SecurityProvider.Tests.Domain;
 
-public class SUTUtil
+public class RoleBasedSUT
 {
     public static IUser MakeSUT(IAction action, List<PolicyEffect> effects)
     {

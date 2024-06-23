@@ -21,7 +21,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectDeny_NoneEffect()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { });
+        var user = RoleBasedSUT.MakeSUT(action, new() { });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -32,7 +32,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectDeny_EqualAmountEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -43,7 +43,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectDeny_MoreDenyEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -54,7 +54,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectDeny_MoreAllowEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -76,7 +76,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectAllow_NoneEffect()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { });
+        var user = RoleBasedSUT.MakeSUT(action, new() { });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -88,7 +88,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectAllow_EqualAmountEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -100,7 +100,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectAllow_MoreDenyEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -111,7 +111,7 @@ public class RoleBasedAmountOfEffectsTest
     public void DefaultEffectAllow_MoreAllowEffects()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow, PolicyEffect.Allow });
 
         var result = new RoleBasedAmountOfEffects().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 

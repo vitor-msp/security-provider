@@ -21,7 +21,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectDeny_NoneAllowEffect()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -32,7 +32,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectDeny_OneAllowAndNoneDeny()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -43,7 +43,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectDeny_OneAllowAndOneDeny()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow, PolicyEffect.Deny });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Deny);
 
@@ -65,7 +65,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectAllow_NoneDenyEffect()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Allow });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -76,7 +76,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectAllow_OneDenyAndNoneAllow()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
@@ -87,7 +87,7 @@ public class RoleBasedOneOppositeEffectTest
     public void DefaultEffectAllow_OneDenyAndOneAllow()
     {
         var action = ActionTest.GetAction();
-        var user = SUTUtil.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
+        var user = RoleBasedSUT.MakeSUT(action, new() { PolicyEffect.Deny, PolicyEffect.Allow });
 
         var result = new RoleBasedOneOppositeEffect().UserCanAccessAction(user, action, defaultEffect: PolicyEffect.Allow);
 
