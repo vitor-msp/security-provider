@@ -1,4 +1,5 @@
 using SecurityProvider.Domain.Entities.Contract;
+using SecurityProvider.Domain.Entities.Group;
 using SecurityProvider.Domain.Entities.Policy;
 using SecurityProvider.Domain.Entities.Role;
 
@@ -13,7 +14,9 @@ public interface IUser : IEntity<UserRequiredFields, UserOptionalFields, UserSel
     string Name { get; }
     string? Department { get; }
     List<IPolicy> Policies { get; }
+    List<IGroup> Groups { get; }
     IRole? Role { get; set; }
     void AttachPolicy(IPolicy policy);
     void DetachPolicy(IPolicy policy);
+    void AddInGroup(IGroup group);
 }

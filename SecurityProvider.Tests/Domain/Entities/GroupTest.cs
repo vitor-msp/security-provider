@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
 using SecurityProvider.Domain;
 using SecurityProvider.Domain.Entities.Group;
-using SecurityProvider.Domain.Entities.User;
 using Xunit;
 
 namespace SecurityProvider.Tests.Domain;
 
 public class GroupTest
 {
-    private readonly string _name = "developers";
-    private readonly string _description = "development department group";
+    private static readonly string _name = "developers";
+    private static readonly string _description = "development department group";
 
-    private Group GetGroup()
+    public static Group GetGroup()
     {
         return new Group(new GroupRequiredFields() { Name = _name });
     }

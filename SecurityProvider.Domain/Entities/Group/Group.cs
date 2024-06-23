@@ -104,8 +104,10 @@ public class Group :
 
     public void AddUser(IUser user)
     {
-        if (!_users.Contains(user))
-            _users.Add(user);
+        if (_users.Contains(user))
+            return;
+        _users.Add(user);
+        user.AddInGroup(this);
     }
 
     public void RemoveUser(IUser user)

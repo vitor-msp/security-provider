@@ -1,4 +1,5 @@
 using SecurityProvider.Domain.Entities.Contract;
+using SecurityProvider.Domain.Entities.Group;
 using SecurityProvider.Domain.Entities.Policy;
 using SecurityProvider.Domain.Entities.Role;
 
@@ -53,6 +54,12 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
     }
 
     public IRole? Role { get; set; }
+
+    private readonly List<IGroup> _groups = new();
+    public List<IGroup> Groups
+    {
+        get { return new(_groups); }
+    }
 
     public User(UserRequiredFields fields) : base(fields)
     {
@@ -123,5 +130,11 @@ public class User : Entity<UserRequiredFields, UserOptionalFields, UserSelfGener
     public void DetachPolicy(IPolicy policy)
     {
         _policies.Remove(policy);
+    }
+
+    public void AddInGroup(IGroup group)
+    {
+        if (!_groups.Contains(group))
+            _groups.Add(group);
     }
 }
